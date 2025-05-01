@@ -1,62 +1,52 @@
-<!-- resources/views/sentiments/index.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Analisis Sentimen')
 
 @section('content')
-    <div class="text-center mb-10">
-        <h1 class="text-4xl font-bold text-white mb-2 drop-shadow-lg">Prediksi Kepuasan Pelanggan</h1>
-        <p class="text-white/80 max-w-2xl mx-auto">
-            Analisis sentimen untuk memahami tingkat kepuasan pelanggan Anda berdasarkan feedback yang diberikan
-        </p>
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Prediksi Kepuasan Pelanggan</h1>
+                <p class="text-gray-600 mt-1">
+                    Analisis sentimen untuk memahami tingkat kepuasan pelanggan Anda
+                </p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-gray-500">Last analyzed:</span>
+                <span class="text-sm font-medium text-indigo-600">
+                    @if(session('result'))
+                        {{ now()->format('d M Y, H:i') }}
+                    @else
+                        No data yet
+                    @endif
+                </span>
+            </div>
+        </div>
     </div>
 
-    <div class="bg-white/20 backdrop-blur-md rounded-xl p-1 mb-8 inline-flex">
-        <a href="{{ route('sentiments.index') }}" class="px-4 py-2 rounded-lg {{ request()->routeIs('sentiments.index') ? 'bg-white text-blue-600 shadow-lg' : 'text-white' }} transition-all duration-300 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6 12h12M8 8l-4 4 4 4"/>
-            </svg>
-            <span>Input Sentimen</span>
-        </a>
-        <a href="{{ route('sentiments.dashboard') }}" class="px-4 py-2 rounded-lg {{ request()->routeIs('sentiments.dashboard') ? 'bg-white text-blue-600 shadow-lg' : 'text-white' }} transition-all duration-300 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                <path d="M3 9h18"/>
-                <path d="M9 21V9"/>
-            </svg>
-            <span>Dashboard</span>
-        </a>
-        <a href="{{ route('sentiments.history') }}" class="px-4 py-2 rounded-lg {{ request()->routeIs('sentiments.history') ? 'bg-white text-blue-600 shadow-lg' : 'text-white' }} transition-all duration-300 flex items-center gap-2">
-            <svg xmlns="http://www.  }} transition-all duration-300 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 3v18h18"/>
-                <path d="m19 9-5 5-4-4-3 3"/>
-            </svg>
-            <span>Riwayat Analisis</span>
-        </a>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-8">
-        <div class="glass-card card-hover rounded-xl overflow-hidden border-none shadow-xl">
+    <div class="grid lg:grid-cols-2 gap-8">
+        <!-- Input Card -->
+        <div class="glass-card card-hover rounded-xl overflow-hidden border border-gray-200">
             <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6">
-                <h2 class="text-xl font-bold">Analisis Sentimen</h2>
-                <p class="text-white/80">Masukkan feedback pelanggan untuk menganalisis sentimen</p>
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-comment-alt text-white text-xl"></i>
+                    <h2 class="text-xl font-bold">Analisis Sentimen</h2>
+                </div>
+                <p class="text-white/80 mt-1">Masukkan feedback pelanggan untuk menganalisis sentimen</p>
             </div>
             <div class="p-6">
                 <form action="{{ route('sentiments.analyze') }}" method="POST">
                     @csrf
                     <div class="mb-4">
-                        <textarea name="text" rows="5" class="w-full rounded-md border-2 border-indigo-100 focus:border-indigo-300 p-3 transition-all" placeholder="Masukkan feedback pelanggan di sini...">{{ old('text') }}</textarea>
+                        <label for="feedback-text" class="block text-sm font-medium text-gray-700 mb-2">Feedback Pelanggan</label>
+                        <textarea name="text" id="feedback-text" rows="5" class="w-full rounded-lg border border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-3 transition-all" placeholder="Masukkan feedback pelanggan di sini...">{{ old('text') }}</textarea>
                         @error('text')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="flex justify-end">
-                        <button type="submit" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-4 py-2 rounded-md transition-all duration-300 shadow-md flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="m22 2-7 20-4-9-9-4Z"/>
-                                <path d="M22 2 11 13"/>
-                            </svg>
+                        <button type="submit" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-2.5 rounded-lg transition-all duration-300 shadow-md flex items-center gap-2">
+                            <i class="fas fa-analytics"></i>
                             <span>Analisis Sentimen</span>
                         </button>
                     </div>
@@ -64,6 +54,7 @@
             </div>
         </div>
 
+        <!-- Result Card -->
         @if(session('result'))
             @php
                 $result = session('result');
@@ -76,56 +67,79 @@
                 $interpretationText = $result['sentiment'] === 'positive' ? 'Pelanggan menunjukkan kepuasan terhadap produk atau layanan. Umpan balik ini sangat positif.' : ($result['sentiment'] === 'negative' ? 'Pelanggan tidak puas dengan pengalaman mereka. Perlu tindak lanjut untuk perbaikan layanan.' : 'Pelanggan memiliki pendapat netral. Ada ruang untuk peningkatan kepuasan.');
             @endphp
 
-            <div class="glass-card card-hover rounded-xl overflow-hidden border-none shadow-xl {{ $glowClass }}">
+            <div class="glass-card card-hover rounded-xl overflow-hidden border border-gray-200 {{ $glowClass }}">
                 <div class="{{ $headerClass }} p-6">
-                    <h2 class="text-xl font-bold">Hasil Analisis</h2>
+                    <div class="flex items-center gap-3">
+                        @if($result['sentiment'] === 'positive')
+                            <i class="fas fa-smile text-white text-xl"></i>
+                        @elseif($result['sentiment'] === 'negative')
+                            <i class="fas fa-frown text-white text-xl"></i>
+                        @else
+                            <i class="fas fa-meh text-white text-xl"></i>
+                        @endif
+                        <h2 class="text-xl font-bold">Hasil Analisis</h2>
+                    </div>
                 </div>
                 <div class="p-6">
                     <div class="flex flex-col gap-6">
+                        <!-- Sentiment Badge -->
                         <div class="flex items-center gap-4">
                             <div class="p-4 rounded-full {{ $iconBgClass }}">
                                 @if($result['sentiment'] === 'positive')
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="10"/>
-                                        <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-                                        <line x1="9" x2="9.01" y1="9" y2="9"/>
-                                        <line x1="15" x2="15.01" y1="9" y2="9"/>
-                                    </svg>
+                                    <i class="fas fa-smile text-xl"></i>
                                 @elseif($result['sentiment'] === 'negative')
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="10"/>
-                                        <line x1="8" x2="16" y1="15" y2="15"/>
-                                        <line x1="9" x2="9.01" y1="9" y2="9"/>
-                                        <line x1="15" x2="15.01" y1="9" y2="9"/>
-                                    </svg>
+                                    <i class="fas fa-frown text-xl"></i>
                                 @else
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="10"/>
-                                        <line x1="8" x2="16" y1="12" y2="12"/>
-                                        <line x1="9" x2="9.01" y1="9" y2="9"/>
-                                        <line x1="15" x2="15.01" y1="9" y2="9"/>
-                                    </svg>
+                                    <i class="fas fa-meh text-xl"></i>
                                 @endif
                             </div>
                             <div>
-                                <p class="text-sm font-medium mb-1">Sentimen:</p>
-                                <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold {{ $badgeClass }} text-white">
+                                <p class="text-sm font-medium text-gray-500 mb-1">Sentimen:</p>
+                                <span class="inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold {{ $badgeClass }} text-white">
                                     {{ $sentimentText }}
                                 </span>
                             </div>
                         </div>
+
+                        <!-- Confidence Meter -->
                         <div>
-                            <p class="text-sm font-medium mb-2">Tingkat Kepercayaan:</p>
-                            <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                                <div class="h-3 rounded-full {{ $barClass }}" style="width: {{ round($result['probability'] * 100) }}%; transition: width 1s ease-in-out;"></div>
+                            <div class="flex justify-between items-center mb-2">
+                                <p class="text-sm font-medium text-gray-500">Tingkat Kepercayaan:</p>
+                                <span class="text-sm font-bold text-indigo-600">{{ round($result['probability'] * 100) }}%</span>
                             </div>
-                            <p class="text-xs text-right mt-1 font-bold">{{ round($result['probability'] * 100) }}%</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                                <div class="h-2.5 rounded-full {{ $barClass }}" style="width: {{ round($result['probability'] * 100) }}%; transition: width 1s ease-in-out;"></div>
+                            </div>
                         </div>
-                        <div class="mt-2 p-4 rounded-lg bg-gray-50">
-                            <p class="text-sm font-medium mb-2">Interpretasi:</p>
-                            <p class="text-sm">{{ $interpretationText }}</p>
+
+                        <!-- Interpretation -->
+                        <div class="mt-2 p-4 rounded-lg bg-gray-50 border border-gray-200">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i class="fas fa-lightbulb text-indigo-500"></i>
+                                <p class="text-sm font-medium text-gray-700">Interpretasi:</p>
+                            </div>
+                            <p class="text-sm text-gray-600">{{ $interpretationText }}</p>
+                        </div>
+
+                        <!-- Feedback Preview -->
+                        <div class="mt-2">
+                            <p class="text-sm font-medium text-gray-500 mb-2">Feedback yang dianalisis:</p>
+                            <div class="p-3 bg-gray-50 rounded-lg border border-gray-200 max-h-32 overflow-y-auto">
+                                <p class="text-sm text-gray-600">{{ session('text') }}</p>
+                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        @else
+            <!-- Empty State -->
+            <div class="glass-card card-hover rounded-xl overflow-hidden border border-gray-200 flex items-center justify-center min-h-full">
+                <div class="text-center p-8">
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 mb-4">
+                        <i class="fas fa-comment-dots text-indigo-600"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-1">Belum ada hasil analisis</h3>
+                    <p class="text-sm text-gray-500">Masukkan feedback pelanggan di form sebelah untuk melihat hasil analisis sentimen.</p>
                 </div>
             </div>
         @endif

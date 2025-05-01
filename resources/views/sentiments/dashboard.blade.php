@@ -5,35 +5,13 @@
 
 @section('content')
     <div class="text-center mb-10">
-        <h1 class="text-4xl font-bold text-white mb-2 drop-shadow-lg">Dashboard Analisis Sentimen</h1>
-        <p class="text-white/80 max-w-2xl mx-auto">
+        <h1 class="text-4xl font-bold text-black mb-2 drop-shadow-lg">Dashboard Analisis Sentimen</h1>
+        <p class="text-black/80 max-w-2xl mx-auto">
             Visualisasi data sentimen pelanggan
         </p>
     </div>
 
-    <div class="bg-white/20 backdrop-blur-md rounded-xl p-1 mb-8 inline-flex">
-        <a href="{{ route('sentiments.index') }}" class="px-4 py-2 rounded-lg {{ request()->routeIs('sentiments.index') ? 'bg-white text-blue-600 shadow-lg' : 'text-white' }} transition-all duration-300 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6 12h12M8 8l-4 4 4 4"/>
-            </svg>
-            <span>Input Sentimen</span>
-        </a>
-        <a href="{{ route('sentiments.dashboard') }}" class="px-4 py-2 rounded-lg {{ request()->routeIs('sentiments.dashboard') ? 'bg-white text-blue-600 shadow-lg' : 'text-white' }} transition-all duration-300 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                <path d="M3 9h18"/>
-                <path d="M9 21V9"/>
-            </svg>
-            <span>Dashboard</span>
-        </a>
-        <a href="{{ route('sentiments.history') }}" class="px-4 py-2 rounded-lg {{ request()->routeIs('sentiments.history') ? 'bg-white text-blue-600 shadow-lg' : 'text-white' }} transition-all duration-300 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 3v18h18"/>
-                <path d="m19 9-5 5-4-4-3 3"/>
-            </svg>
-            <span>Riwayat Analisis</span>
-        </a>
-    </div>
+   
 
     <div class="grid md:grid-cols-2 gap-8">
         <div class="glass-card card-hover rounded-xl overflow-hidden border-none shadow-xl">

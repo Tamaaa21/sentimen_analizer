@@ -19,30 +19,40 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
+   // In App\Http\Controllers\Auth\LoginController.php
+public function login(Request $request)
+{
+    // ... existing validation code ...
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
+    $credentials = $request->only('email', 'password');
+    $remember = $request->filled('remember');
 
-        $credentials = $request->only('email', 'password');
-        $remember = $request->filled('remember');
+    if (Auth::attempt($credentials, $remember)) {
+        $request->session()->regenerate();
 
-        if (Auth::attempt($credentials, $remember)) {
-            $request->session()->regenerate();
-
-            return redirect()->intended(route('sentiments.index'));
-        }
-
-        return back()->withErrors([
-            'email' => 'Email atau password yang Anda masukkan salah.',
-        ])->withInput();
+        return redirect()->intended(route('home'));
     }
+
+    // ... error handling code ...
 }
+
+// In App\Http\Controllers\Auth\RegisterController.php
+public function register(Request $request)
+{
+    // ... existing validation and user creation code ...
+
+    auth()->login($user);
+
+    return redirect()->route('home')->with('success', 'Akun berhasil dibuat dan Anda telah login.');
+}
+
+// In App\Http\Controllers\Auth\LogoutController.php
+public function logout(Request $request)
+{
+    Auth::logout();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('home');
+}}

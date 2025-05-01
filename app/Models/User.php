@@ -41,4 +41,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // Tambahkan di dalam class User
+
+public function sentiments()
+{
+    return $this->hasMany(Sentiment::class);
+}
+
 }

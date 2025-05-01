@@ -18,6 +18,7 @@ return new class extends Migration
             $table->enum('sentiment', ['positive', 'negative', 'neutral','unknown']);
             $table->float('probability');
             $table->timestamps();
+            $table->string('sentiment', 10)->default('neutral');
         });
     }
 
