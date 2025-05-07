@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sentiments', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->text('text');
-            $table->enum('sentiment', ['positive', 'negative', 'neutral','unknown']);
-            $table->float('probability');
-            $table->timestamps();
-            $table->string('sentiment', 10)->default('neutral');
-        });
+ Schema::create('sentiments', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('user_id')->constrained()->onDelete('cascade');
+    $table->text('text');
+    $table->enum('sentiment', ['positive', 'negative', 'neutral', 'unknown'])->default('neutral');
+    $table->float('probability');
+    $table->timestamps();
+});
+
     }
 
     /**

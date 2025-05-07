@@ -102,63 +102,71 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Bar Chart
-        const barCtx = document.getElementById('barChart').getContext('2d');
-        const barChart = new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Positif', 'Netral', 'Negatif'],
-                datasets: [{
-                    label: 'Jumlah Ulasan',
-                    data: [{{ $sentimentCounts['positive'] }}, {{ $sentimentCounts['neutral'] }}, {{ $sentimentCounts['negative'] }}],
-                    backgroundColor: [
-                        '#22c55e', // green-500
-                        '#eab308', // yellow-500
-                        '#ef4444', // red-500
-                    ],
-                    borderRadius: 4,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            precision: 0
-                        }
+  document.addEventListener('DOMContentLoaded', function() {
+    // Bar Chart
+    const barCtx = document.getElementById('barChart').getContext('2d');
+    const barChart = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Positif', 'Netral', 'Negatif'],
+            datasets: [{
+                label: 'Jumlah Ulasan',
+                data: [
+                    {{ $sentimentCounts['positive'] ?? 0 }}, 
+                    {{ $sentimentCounts['neutral'] ?? 0 }}, 
+                    {{ $sentimentCounts['negative'] ?? 0 }}
+                ],
+                backgroundColor: [
+                    '#22c55e', // green-500
+                    '#eab308', // yellow-500
+                    '#ef4444'  // red-500
+                ],
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
                     }
                 }
             }
-        });
-
-        // Pie Chart
-        const pieCtx = document.getElementById('pieChart').getContext('2d');
-        const pieChart = new Chart(pieCtx, {
-            type: 'pie',
-            data: {
-                labels: ['Positif', 'Netral', 'Negatif'],
-                datasets: [{
-                    data: [{{ $sentimentCounts['positive'] }}, {{ $sentimentCounts['neutral'] }}, {{ $sentimentCounts['negative'] }}],
-                    backgroundColor: [
-                        '#22c55e', // green-500
-                        '#eab308', // yellow-500
-                        '#ef4444', // red-500
-                    ],
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                    }
-                }
-            }
-        });
+        }
     });
+
+    // Pie Chart
+    const pieCtx = document.getElementById('pieChart').getContext('2d');
+    const pieChart = new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Positif', 'Netral', 'Negatif'],
+            datasets: [{
+                data: [
+                    {{ $sentimentCounts['positive'] ?? 0 }}, 
+                    {{ $sentimentCounts['neutral'] ?? 0 }}, 
+                    {{ $sentimentCounts['negative'] ?? 0 }}
+                ],
+                backgroundColor: [
+                    '#22c55e', // green-500
+                    '#eab308', // yellow-500
+                    '#ef4444'  // red-500
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right'
+                }
+            }
+        }
+    });
+});
 </script>
 @endpush

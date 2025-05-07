@@ -108,8 +108,7 @@
                                 <span class="text-sm font-bold text-indigo-600">{{ round($result['probability'] * 100) }}%</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                                <div class="h-2.5 rounded-full {{ $barClass }}" style="width: {{ round($result['probability'] * 100) }}%; transition: width 1s ease-in-out;"></div>
-                            </div>
+<div class="h-2.5 rounded-full {{ $barClass }}" data-width="{{ round($result['probability'] * 100) }}"></div>                            </div>
                         </div>
 
                         <!-- Interpretation -->

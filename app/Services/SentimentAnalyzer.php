@@ -213,59 +213,78 @@ class SentimentAnalyzer
      * @param float $givenProbability Optional probability for pre-determined sentiment
      * @return array ['sentiment' => string, 'probability' => float]
      */
- public function analyze(string $text, ?string $givenSentiment = null, float $givenProbability = 0.8): array
-{
-    // If sentiment is provided, use it directly
-    if ($givenSentiment !== null) {
-        $validSentiments = ['positive', 'negative', 'neutral'];
-        $sentiment = in_array(strtolower($givenSentiment), $validSentiments)
-            ? strtolower($givenSentiment)
-            : 'neutral';
+    public function analyze(string $text, ?string $givenSentiment = null, float $givenProbability = 0.8): array
+    {
+        // If sentiment is provided, use it directly
+        if ($givenSentiment !== null) {
+            $validSentiments = ['positive', 'negative', 'neutral'];
+            $sentiment = in_array(strtolower($givenSentiment), $validSentiments)
+                ? strtolower($givenSentiment)
+                : 'neutral';
 
-        return [
-            'sentiment' => $sentiment,
-            'probability' => max(0, min(1, $givenProbability)) // Ensure between 0-1
-        ];
-    }
-
-    $words = $this->preprocessText($text);
-    $logProbs = [];
-
-    foreach ($this->wordFrequencies as $sentiment => $frequencies) {
-        $logProb = log($this->priors[$sentiment]);
-        $totalWordsInClass = array_sum($frequencies);
-        $vocabSize = count(array_unique(array_merge(...array_values($this->wordFrequencies))));
-
-        foreach ($words as $word) {
-            $wordCount = $frequencies[$word] ?? 0;
-            // Laplace smoothing
-            $logProb += log(($wordCount + 1) / ($totalWordsInClass + $vocabSize));
+            return [
+                'sentiment' => $sentiment,
+                'probability' => max(0, min(1, $givenProbability)) // Ensure between 0-1
+            ];
         }
 
-        $logProbs[$sentiment] = $logProb;
+        // Simulate processing delay for realism
+        usleep(self::PROCESSING_DELAY_MS);
+
+        $words = $this->preprocessText($text);
+        $scores = [];
+        $vocabularySize = $this->calculateVocabularySize();
+
+        foreach ($this->priors as $sentiment => $prior) {
+            // Start with log of prior probability
+            $scores[$sentiment] = log($prior);
+
+            // Add log probabilities of each word given the class
+            foreach ($words as $word) {
+                $wordCount = $this->wordFrequencies[$sentiment][$word] ?? 0;
+                $totalWords = array_sum($this->wordFrequencies[$sentiment]);
+
+                // Laplace smoothing (add-one)
+                $probability = ($wordCount + 1) / ($totalWords + $vocabularySize);
+                $scores[$sentiment] += log($probability);
+            }
+        }
+
+        return $this->determineSentimentFromScores($scores);
     }
 
-    // Normalisasi logProb ke probabilitas nyata
-    $maxLog = max($logProbs);
-    $expProbs = [];
-    $sumExp = 0;
-    foreach ($logProbs as $sentiment => $logProb) {
-        $expProbs[$sentiment] = exp($logProb - $maxLog);
-        $sumExp += $expProbs[$sentiment];
+    // Calculate the size of the vocabulary (unique words across all classes)
+    private function calculateVocabularySize(): int
+    {
+        $allWords = [];
+        foreach ($this->wordFrequencies as $classWords) {
+            $allWords = array_merge($allWords, array_keys($classWords));
+        }
+        return count(array_unique($allWords));
     }
 
-    $finalProbs = array_map(function ($val) use ($sumExp) {
-        return $val / $sumExp;
-    }, $expProbs);
+    // Determine the sentiment from the calculated scores
+    private function determineSentimentFromScores(array $scores): array
+    {
+        if (empty($scores)) {
+            return ['sentiment' => 'neutral', 'probability' => 0];
+        }
 
-    arsort($finalProbs);
-    $predicted = array_key_first($finalProbs);
+        $predictedSentiment = array_search(max($scores), $scores);
 
-    return [
-        'sentiment' => $predicted,
-        'probability' => round($finalProbs[$predicted], 4)
-    ];
-}
+        // Convert log probabilities back to probabilities and normalize
+        $expScores = array_map('exp', $scores);
+        $totalExpScore = array_sum($expScores);
+
+        $probability = $totalExpScore > 0
+            ? $expScores[$predictedSentiment] / $totalExpScore
+            : 0;
+
+        return [
+            'sentiment' => $predictedSentiment,
+            'probability' => $probability
+        ];
+    }
 
     /**
      * Get the training data (for debugging or extension)

@@ -50,7 +50,7 @@
                     @enderror
                     
                     <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                        <div id="probabilityBar" class="h-2 rounded-full bg-blue-500" style="width: {{ round($sentiment->probability * 100) }}%;"></div>
+                        <div id="probabilityBar" class="h-2 rounded-full bg-blue-500" ></div>
                     </div>
                 </div>
                 

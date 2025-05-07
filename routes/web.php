@@ -25,4 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/import', [App\Http\Controllers\SentimentController::class, 'import'])->name('sentiments.import');
     Route::get('/export', [App\Http\Controllers\SentimentController::class, 'export'])->name('sentiments.export');
     Route::get('/print', [App\Http\Controllers\SentimentController::class, 'print'])->name('sentiments.print');
+    // Add this route to your existing routes
+Route::get('/dashboard/data', [App\Http\Controllers\SentimentController::class, 'dashboardData'])->name('sentiments.dashboard.data');
+Route::get('/debug-sentiment', [App\Http\Controllers\SentimentController::class, 'debug']);
 });

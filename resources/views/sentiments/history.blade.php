@@ -89,8 +89,7 @@
                                                 @php
                                                     $barClass = $sentiment->sentiment === 'positive' ? 'bg-green-500' : ($sentiment->sentiment === 'negative' ? 'bg-red-500' : 'bg-yellow-500');
                                                 @endphp
-                                                <div class="h-2 rounded-full {{ $barClass }}" style="width: {{ round($sentiment->probability * 100) }}%;"></div>
-                                            </div>
+<div class="h-2 rounded-full some-class" style="width: 85%;"></div>                                            </div>
                                             <span>{{ round($sentiment->probability * 100) }}%</span>
                                         </div>
                                     </td>
